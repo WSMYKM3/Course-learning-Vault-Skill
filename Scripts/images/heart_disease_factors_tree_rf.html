@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>影响心脏病的因素：决策树与随机森林</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #5f687a;
+      --line: #d9dee8;
+      --soft: #eef2f7;
+      --blue: #2563eb;
+      --teal: #0f766e;
+      --green: #15803d;
+      --amber: #b45309;
+      --red: #b91c1c;
+      --violet: #7c3aed;
+      --shadow: 0 14px 35px rgba(23, 32, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    header {
+      background: #172033;
+      color: #fff;
+      padding: 42px 22px 34px;
+      border-bottom: 6px solid #0f766e;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 20px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .subtitle {
+      max-width: 900px;
+      color: #d8dfed;
+      font-size: 17px;
+    }
+
+    main {
+      padding: 28px 0 48px;
+    }
+
+    section {
+      margin: 0 0 24px;
+      padding: 26px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .note {
+      padding: 14px 16px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 5px solid var(--amber);
+      border-radius: 6px;
+      color: #6b3f06;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .tile {
+      padding: 16px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .tile strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #e9eef6;
+      color: #253044;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .yes {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .no {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .formula {
+      margin: 12px 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+        monospace;
+      font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 6px;
+      color: #075985;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .svg-box {
+      overflow-x: auto;
+      padding: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    svg {
+      display: block;
+      min-width: 760px;
+      max-width: 100%;
+      height: auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-item {
+      display: grid;
+      grid-template-columns: 130px 1fr 70px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-track {
+      height: 16px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 10px 12px;
+      color: #172033;
+      text-decoration: none;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 20px 0 36px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      section {
+        padding: 20px;
+      }
+
+      .grid,
+      .mini-grid,
+      .toc {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-item {
+        grid-template-columns: 104px 1fr 58px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>影响心脏病的因素：用决策树与随机森林完整演算</h1>
+      <p class="subtitle">
+        基于 ObsidianNotes 中的决策树分割标准、袋装法、随机森林、OOB、MDI、
+        置换重要性、准确率与 F1 等知识点，构造一份教学用假设数据并把公式逐步代入。
+      </p>
+      <div class="toc" aria-label="页面导航">
+        <a href="#data">1. 假设数据表</a>
+        <a href="#tree">2. 决策树与公式</a>
+        <a href="#forest">3. 随机森林</a>
+        <a href="#metrics">4. 评估与重要性</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <h2>学习目标</h2>
+      <div class="mini-grid">
+        <div class="tile">
+          <strong>分类任务</strong>
+          用 9 个预测变量判断目标变量“是否有心脏病”，输出类别为“是/否”。
+        </div>
+        <div class="tile">
+          <strong>决策树</strong>
+          用分类错误率、基尼指数、熵、加权平均不纯度、不纯度下降来选择分裂。
+        </div>
+        <div class="tile">
+          <strong>随机森林</strong>
+          用自助采样、特征随机性、多数投票、OOB、MDI 与置换重要性解释森林模型。
+        </div>
+      </div>
+      <p class="note">
+        说明：下面的数据完全是假设的机器学习教学数据，只用于演示公式和建模流程，
+        不能作为医学诊断或健康建议。
+      </p>
+    </section>
+
+    <section id="data">
+      <h2>表：影响心脏病的因素</h2>
+      <p>
+        这里设定 9 个因素作为特征，最后一列“是否有心脏病”作为响应变量
+        <strong>Y</strong>。为了方便手算，样本量设为 12 条。
+      </p>
+      <div class="table-scroll">
+        <table aria-label="影响心脏病的因素假设表">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>年龄</th>
+              <th>性别</th>
+              <th>胸痛类型</th>
+              <th>静息血压</th>
+              <th>胆固醇</th>
+              <th>空腹血糖&gt;120</th>
+              <th>最大心率</th>
+              <th>运动诱发心绞痛</th>
+              <th>ST 压低</th>
+              <th>是否有心脏病</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>52</td><td>男</td><td>典型</td><td>125</td><td>212</td><td>否</td><td>168</td><td>否</td><td>0.8</td><td class="no">否</td></tr>
+            <tr><td>2</td><td>63</td><td>男</td><td>无症状型</td><td>145</td><td>275</td><td>是</td><td>132</td><td>是</td><td>2.4</td><td class="yes">是</td></tr>
+            <tr><td>3</td><td>58</td><td>女</td><td>非典型</td><td>132</td><td>230</td><td>否</td><td>155</td><td>否</td><td>1.1</td><td class="no">否</td></tr>
+            <tr><td>4</td><td>67</td><td>男</td><td>无症状型</td><td>160</td><td>286</td><td>是</td><td>108</td><td>是</td><td>3.2</td><td class="yes">是</td></tr>
+            <tr><td>5</td><td>45</td><td>女</td><td>非心绞痛</td><td>118</td><td>205</td><td>否</td><td>172</td><td>否</td><td>0.4</td><td class="no">否</td></tr>
+            <tr><td>6</td><td>54</td><td>男</td><td>无症状型</td><td>140</td><td>260</td><td>否</td><td>122</td><td>是</td><td>2.1</td><td class="yes">是</td></tr>
+            <tr><td>7</td><td>49</td><td>女</td><td>典型</td><td>120</td><td>220</td><td>否</td><td>160</td><td>否</td><td>0.7</td><td class="no">否</td></tr>
+            <tr><td>8</td><td>61</td><td>男</td><td>非心绞痛</td><td>138</td><td>248</td><td>否</td><td>140</td><td>是</td><td>1.8</td><td class="yes">是</td></tr>
+            <tr><td>9</td><td>56</td><td>女</td><td>无症状型</td><td>130</td><td>236</td><td>否</td><td>150</td><td>否</td><td>1.3</td><td class="yes">是</td></tr>
+            <tr><td>10</td><td>43</td><td>男</td><td>非典型</td><td>115</td><td>198</td><td>否</td><td>178</td><td>否</td><td>0.2</td><td class="no">否</td></tr>
+            <tr><td>11</td><td>70</td><td>女</td><td>无症状型</td><td>155</td><td>300</td><td>是</td><td>112</td><td>是</td><td>3.0</td><td class="yes">是</td></tr>
+            <tr><td>12</td><td>50</td><td>男</td><td>非心绞痛</td><td>128</td><td>240</td><td>否</td><td>158</td><td>否</td><td>0.9</td><td class="no">否</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tag-row">
+        <span class="tag">总样本 n = 12</span>
+        <span class="tag">有病 = 6</span>
+        <span class="tag">无病 = 6</span>
+        <span class="tag">特征 p = 9</span>
+      </div>
+    </section>
+
+    <section id="tree">
+      <h2>一棵决策树：从表格到分裂规则</h2>
+      <p>
+        这棵示例树使用贪心算法：每一步都寻找当前节点中让不纯度下降最大的分裂。
+        为了和课程公式对应，下面先用“胸痛类型是否为无症状型”做根节点分裂，
+        再在右侧节点用“胆固醇是否大于等于 245”继续分裂。
+      </p>
+
+      <div class="svg-box" aria-label="决策树图">
+        <svg viewBox="0 0 920 420" role="img">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L9,3 z" fill="#5f687a"></path>
+            </marker>
+          </defs>
+          <rect x="312" y="24" width="296" height="78" rx="8" fill="#e0f2fe" stroke="#2563eb" stroke-width="2"></rect>
+          <text x="460" y="52" text-anchor="middle" font-size="18" font-weight="700" fill="#172033">根节点：12人</text>
+          <text x="460" y="79" text-anchor="middle" font-size="15" fill="#253044">有病6 / 无病6，Gini = 0.500</text>
+
+          <line x1="400" y1="102" x2="232" y2="165" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow)"></line>
+          <line x1="520" y1="102" x2="688" y2="165" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow)"></line>
+          <text x="286" y="136" font-size="14" fill="#0f766e" font-weight="700">胸痛 = 无症状型</text>
+          <text x="577" y="136" font-size="14" fill="#b45309" font-weight="700">胸痛 != 无症状型</text>
+
+          <rect x="84" y="166" width="292" height="78" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"></rect>
+          <text x="230" y="194" text-anchor="middle" font-size="18" font-weight="700" fill="#172033">叶节点 A：5人</text>
+          <text x="230" y="221" text-anchor="middle" font-size="15" fill="#253044">有病5 / 无病0，预测：有病</text>
+
+          <rect x="544" y="166" width="292" height="78" rx="8" fill="#ecfdf5" stroke="#15803d" stroke-width="2"></rect>
+          <text x="690" y="194" text-anchor="middle" font-size="18" font-weight="700" fill="#172033">节点 B：7人</text>
+          <text x="690" y="221" text-anchor="middle" font-size="15" fill="#253044">有病1 / 无病6，Gini = 12/49</text>
+
+          <line x1="642" y1="244" x2="506" y2="309" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow)"></line>
+          <line x1="738" y1="244" x2="826" y2="309" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow)"></line>
+          <text x="526" y="281" font-size="14" fill="#b91c1c" font-weight="700">胆固醇 &gt;= 245</text>
+          <text x="750" y="281" font-size="14" fill="#15803d" font-weight="700">胆固醇 &lt; 245</text>
+
+          <rect x="365" y="310" width="250" height="76" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"></rect>
+          <text x="490" y="338" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">叶节点 B1：1人</text>
+          <text x="490" y="363" text-anchor="middle" font-size="15" fill="#253044">有病1 / 无病0，预测：有病</text>
+
+          <rect x="682" y="310" width="250" height="76" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="2"></rect>
+          <text x="807" y="338" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">叶节点 B2：6人</text>
+          <text x="807" y="363" text-anchor="middle" font-size="15" fill="#253044">有病0 / 无病6，预测：无病</text>
+        </svg>
+      </div>
+
+      <h3>根节点的不纯度</h3>
+      <div class="formula">分类错误率：
+Classification Error(R) = 1 - max(p_yes, p_no)
+                         = 1 - max(6/12, 6/12)
+                         = 1 - 0.5 = 0.5
+
+基尼指数：
+Gini(R) = 1 - (6/12)^2 - (6/12)^2
+        = 1 - 0.25 - 0.25
+        = 0.5
+
+熵：
+Entropy(R) = - (6/12)log2(6/12) - (6/12)log2(6/12)
+           = - 0.5log2(0.5) - 0.5log2(0.5)
+           = 1.000</div>
+
+      <h3>第一次分裂：胸痛类型是否为无症状型</h3>
+      <p>
+        左子节点 A 有 5 人，全部有病；右子节点 B 有 7 人，其中 1 人有病、6 人无病。
+      </p>
+      <div class="formula">左节点 A：
+Gini(A) = 1 - (5/5)^2 - (0/5)^2 = 0
+Error(A) = 1 - max(5/5, 0/5) = 0
+Entropy(A) = 0
+
+右节点 B：
+Gini(B) = 1 - (1/7)^2 - (6/7)^2
+        = 1 - 1/49 - 36/49
+        = 12/49 = 0.2449
+
+Error(B) = 1 - max(1/7, 6/7)
+         = 1 - 6/7
+         = 1/7 = 0.1429
+
+Entropy(B) = - (1/7)log2(1/7) - (6/7)log2(6/7)
+           = 0.5917</div>
+
+      <div class="formula">加权平均不纯度：
+Weighted Gini = (5/12)Gini(A) + (7/12)Gini(B)
+              = (5/12)(0) + (7/12)(12/49)
+              = 1/7 = 0.1429
+
+Weighted Error = (5/12)(0) + (7/12)(1/7)
+               = 1/12 = 0.0833
+
+Weighted Entropy = (5/12)(0) + (7/12)(0.5917)
+                 = 0.3451
+
+不纯度下降：
+Delta Gini = Gini(R) - Weighted Gini
+            = 0.5000 - 0.1429
+            = 0.3571
+
+Delta Entropy = 1.0000 - 0.3451 = 0.6549</div>
+
+      <h3>第二次分裂：在节点 B 中看胆固醇是否大于等于 245</h3>
+      <p>
+        节点 B 的 7 人中，只有 ID 8 的胆固醇为 248 且有病；其余 6 人胆固醇低于 245 且无病。
+        因此这一步把节点 B 分成两个纯叶节点。
+      </p>
+      <div class="formula">节点 B 分裂前：
+Gini(B) = 12/49 = 0.2449
+
+胆固醇 >= 245：1人，有病1 / 无病0
+Gini(B1) = 0
+
+胆固醇 &lt; 245：6人，有病0 / 无病6
+Gini(B2) = 0
+
+Weighted Gini after split = (1/7)(0) + (6/7)(0) = 0
+
+节点 B 内部的不纯度下降：
+Delta Gini_B = 0.2449 - 0 = 0.2449
+
+按整棵树样本比例加权后的贡献：
+(7/12) * 0.2449 = 0.1429</div>
+    </section>
+
+    <section id="forest">
+      <h2>随机森林：三棵树投票</h2>
+      <p>
+        随机森林保留自助采样和投票聚合，同时在每个节点只考虑一小部分随机特征。
+        本表共有 <strong>p = 9</strong> 个特征，分类任务的经验起点是：
+      </p>
+      <div class="formula">m_try ≈ sqrt(p) = sqrt(9) = 3</div>
+      <p>
+        所以每个分裂节点只随机抽取约 3 个候选特征，再从这 3 个特征中找最佳分裂。
+      </p>
+
+      <div class="svg-box" aria-label="随机森林三棵树投票图">
+        <svg viewBox="0 0 1000 520" role="img">
+          <defs>
+            <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L9,3 z" fill="#5f687a"></path>
+            </marker>
+          </defs>
+          <rect x="330" y="20" width="340" height="70" rx="8" fill="#f8fafc" stroke="#172033" stroke-width="2"></rect>
+          <text x="500" y="48" text-anchor="middle" font-size="18" font-weight="700">新患者 x</text>
+          <text x="500" y="73" text-anchor="middle" font-size="14">59岁男，无症状型，胆固醇268，最大心率126，ST=2.5，运动心绞痛=是</text>
+
+          <line x1="420" y1="90" x2="185" y2="145" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow2)"></line>
+          <line x1="500" y1="90" x2="500" y2="145" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow2)"></line>
+          <line x1="580" y1="90" x2="815" y2="145" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow2)"></line>
+
+          <rect x="44" y="146" width="282" height="160" rx="8" fill="#e0f2fe" stroke="#2563eb" stroke-width="2"></rect>
+          <text x="185" y="174" text-anchor="middle" font-size="18" font-weight="700">Tree 1</text>
+          <text x="185" y="203" text-anchor="middle" font-size="14">候选特征：胸痛、胆固醇、性别</text>
+          <text x="185" y="229" text-anchor="middle" font-size="14">胸痛=无症状型 → 有病</text>
+          <text x="185" y="255" text-anchor="middle" font-size="14">叶节点概率 P(有病)=4/5=0.80</text>
+          <text x="185" y="286" text-anchor="middle" font-size="18" fill="#b91c1c" font-weight="700">预测：有病</text>
+
+          <rect x="359" y="146" width="282" height="160" rx="8" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"></rect>
+          <text x="500" y="174" text-anchor="middle" font-size="18" font-weight="700">Tree 2</text>
+          <text x="500" y="203" text-anchor="middle" font-size="14">候选特征：最大心率、ST压低、血压</text>
+          <text x="500" y="229" text-anchor="middle" font-size="14">最大心率&lt;135 且 ST>=2 → 有病</text>
+          <text x="500" y="255" text-anchor="middle" font-size="14">叶节点概率 P(有病)=3/4=0.75</text>
+          <text x="500" y="286" text-anchor="middle" font-size="18" fill="#b91c1c" font-weight="700">预测：有病</text>
+
+          <rect x="674" y="146" width="282" height="160" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"></rect>
+          <text x="815" y="174" text-anchor="middle" font-size="18" font-weight="700">Tree 3</text>
+          <text x="815" y="203" text-anchor="middle" font-size="14">候选特征：运动心绞痛、年龄、空腹血糖</text>
+          <text x="815" y="229" text-anchor="middle" font-size="14">运动心绞痛=是 且 年龄>=55 → 有病</text>
+          <text x="815" y="255" text-anchor="middle" font-size="14">叶节点概率 P(有病)=2/3=0.67</text>
+          <text x="815" y="286" text-anchor="middle" font-size="18" fill="#b91c1c" font-weight="700">预测：有病</text>
+
+          <line x1="185" y1="306" x2="415" y2="384" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow2)"></line>
+          <line x1="500" y1="306" x2="500" y2="384" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow2)"></line>
+          <line x1="815" y1="306" x2="585" y2="384" stroke="#5f687a" stroke-width="2" marker-end="url(#arrow2)"></line>
+
+          <rect x="330" y="385" width="340" height="92" rx="8" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"></rect>
+          <text x="500" y="416" text-anchor="middle" font-size="20" font-weight="700">多数投票：有病 3 票 / 无病 0 票</text>
+          <text x="500" y="446" text-anchor="middle" font-size="16">最终预测：有心脏病</text>
+        </svg>
+      </div>
+
+      <h3>袋装分类多数投票</h3>
+      <div class="formula">y_hat = mode{y_hat_1, y_hat_2, ..., y_hat_B}
+
+本例 B = 3：
+Tree 1 = 有病
+Tree 2 = 有病
+Tree 3 = 有病
+
+y_hat = mode{有病, 有病, 有病} = 有病</div>
+
+      <h3>随机森林类别概率估计</h3>
+      <div class="formula">P_hat(Y = 有病 | x) = (1/B) * sum_{b=1}^B P_hat_b(Y = 有病 | x)
+
+= (0.80 + 0.75 + 0.67) / 3
+= 2.22 / 3
+= 0.74
+
+解释：这不是严格校准后的医学概率，而是随机森林模型给出的类别概率估计。</div>
+    </section>
+
+    <section id="metrics">
+      <h2>评估公式与完整算式</h2>
+
+      <div class="grid">
+        <div>
+          <h3>准确率与 F1</h3>
+          <p>
+            假设随机森林在 12 条样本上得到如下混淆矩阵：
+            TP=5，TN=5，FP=1，FN=1。
+          </p>
+          <div class="formula">Accuracy = (TP + TN) / (TP + TN + FP + FN)
+         = (5 + 5) / (5 + 5 + 1 + 1)
+         = 10 / 12
+         = 0.8333
+
+Precision = TP / (TP + FP)
+          = 5 / (5 + 1)
+          = 5/6 = 0.8333
+
+Recall = TP / (TP + FN)
+       = 5 / (5 + 1)
+       = 5/6 = 0.8333
+
+F1 = 2 * Precision * Recall / (Precision + Recall)
+   = 2 * 0.8333 * 0.8333 / (0.8333 + 0.8333)
+   = 0.8333</div>
+        </div>
+        <div>
+          <h3>袋外预测与袋外误差</h3>
+          <p>
+            OOB 只用“训练时没见过该样本”的树做预测，避免把同一个样本既用于训练又用于评估。
+          </p>
+          <div class="formula">对第 i 个样本：
+y_hat_i^OOB = mode{y_hat_b(x_i) : 样本 i 不在第 b 棵树的自助训练集中}
+
+示例 4 个 OOB 点：
+ID 1：真实=否，OOB预测={否, 否} → y_hat^OOB=否，误差=0
+ID 2：真实=是，OOB预测={是, 是} → y_hat^OOB=是，误差=0
+ID 8：真实=是，OOB预测={否, 是, 是} → y_hat^OOB=是，误差=0
+ID 9：真实=是，OOB预测={否, 否} → y_hat^OOB=否，误差=1
+
+OOB Error = (0 + 0 + 0 + 1) / 4 = 0.25</div>
+        </div>
+      </div>
+
+      <h3>MDI：平均不纯度下降</h3>
+      <p>
+        MDI 的核心是：某个特征在树里带来的基尼下降越大、覆盖样本越多，
+        它对模型越重要。下面先算第一棵树，再做森林平均。
+      </p>
+      <div class="formula">单节点贡献公式：
+MDI(t) = (N_t / N) * [G(t) - (N_L/N_t)G(t_L) - (N_R/N_t)G(t_R)]
+
+Tree 1 根节点使用“胸痛类型”：
+N = 12, N_t = 12, G(t)=0.5000
+分裂后加权 Gini = 0.1429
+MDI_root = (12/12) * (0.5000 - 0.1429)
+         = 0.3571
+
+Tree 1 第二节点使用“胆固醇”：
+N = 12, N_t = 7, G(t)=12/49=0.2449
+分裂后加权 Gini = 0
+MDI_chol = (7/12) * (0.2449 - 0)
+         = 0.1429
+
+Tree 1 未归一化贡献总和：
+0.3571 + 0.1429 = 0.5000
+
+Tree 1 归一化重要性：
+FI_胸痛,T1 = 0.3571 / 0.5000 = 0.7142
+FI_胆固醇,T1 = 0.1429 / 0.5000 = 0.2858</div>
+
+      <div class="formula">森林平均公式：
+FI_j^forest = (1/B) * sum_{b=1}^B FI_{j,T_b}^norm
+
+假设三棵树的归一化贡献如下：
+Tree 1：胸痛 0.7142，胆固醇 0.2858
+Tree 2：最大心率 0.4400，ST压低 0.3600，运动心绞痛 0.2000
+Tree 3：年龄 0.3200，运动心绞痛 0.2800，胸痛 0.2000，胆固醇 0.1000，最大心率 0.1000
+
+胸痛重要性 = (0.7142 + 0 + 0.2000) / 3 = 0.3047
+最大心率重要性 = (0 + 0.4400 + 0.1000) / 3 = 0.1800
+运动心绞痛重要性 = (0 + 0.2000 + 0.2800) / 3 = 0.1600
+胆固醇重要性 = (0.2858 + 0 + 0.1000) / 3 = 0.1286
+ST压低重要性 = (0 + 0.3600 + 0) / 3 = 0.1200
+年龄重要性 = (0 + 0 + 0.3200) / 3 = 0.1067</div>
+
+      <div class="bar-list" aria-label="MDI特征重要性条形图">
+        <div class="bar-item"><span>胸痛类型</span><div class="bar-track"><div class="bar" style="width: 100%"></div></div><strong>30.5%</strong></div>
+        <div class="bar-item"><span>最大心率</span><div class="bar-track"><div class="bar" style="width: 59%"></div></div><strong>18.0%</strong></div>
+        <div class="bar-item"><span>运动心绞痛</span><div class="bar-track"><div class="bar" style="width: 52%"></div></div><strong>16.0%</strong></div>
+        <div class="bar-item"><span>胆固醇</span><div class="bar-track"><div class="bar" style="width: 42%"></div></div><strong>12.9%</strong></div>
+        <div class="bar-item"><span>ST 压低</span><div class="bar-track"><div class="bar" style="width: 39%"></div></div><strong>12.0%</strong></div>
+        <div class="bar-item"><span>年龄</span><div class="bar-track"><div class="bar" style="width: 35%"></div></div><strong>10.7%</strong></div>
+        <div class="bar-item"><span>性别/血压/血糖</span><div class="bar-track"><div class="bar" style="width: 0%"></div></div><strong>0.0%</strong></div>
+      </div>
+
+      <h3>置换重要性</h3>
+      <p>
+        置换重要性固定训练好的模型，只打乱验证集或 OOB 数据中的某一列，
+        观察模型表现下降多少。
+      </p>
+      <div class="formula">PI_j = S - (1/K) * sum_{k=1}^K S_{j,k}^perm
+
+假设原始准确率：
+S = 10/12 = 0.8333
+
+打乱“胸痛类型”3次后的准确率：
+7/12, 8/12, 7/12
+平均 = (7/12 + 8/12 + 7/12) / 3
+     = 22/36
+     = 0.6111
+PI_胸痛 = 0.8333 - 0.6111 = 0.2222
+
+打乱“最大心率”3次后的准确率：
+8/12, 9/12, 8/12
+平均 = 25/36 = 0.6944
+PI_最大心率 = 0.8333 - 0.6944 = 0.1389</div>
+    </section>
+
+    <section>
+      <h2>补充：复杂度控制与剪枝</h2>
+      <p>
+        单棵树越深，通常偏差更低但方差更高，所以可能过拟合。
+        除了最大深度、最小叶节点样本数、最大叶节点数等停止条件，也可以先让树长出来，再剪枝。
+      </p>
+      <div class="formula">代价复杂度剪枝：
+C_alpha(T) = Err(T) + alpha * |T|
+
+假设完整树 T：
+Err(T) = 0, |T| = 3, alpha = 0.25
+C_alpha(T) = 0 + 0.25 * 3 = 0.75
+
+假设剪枝树 T'：
+Err(T') = 2/12 = 0.1667, |T'| = 2
+C_alpha(T') = 0.1667 + 0.25 * 2
+             = 0.6667
+
+因为 0.6667 &lt; 0.75，在 alpha=0.25 时，剪枝树 T' 更划算。</div>
+
+      <div class="formula">剪枝选择比率：
+g(T, T') = [Err(T') - Err(T)] / [|T| - |T'|]
+
+= (0.1667 - 0) / (3 - 2)
+= 0.1667
+
+解释：每减少 1 个叶节点，需要付出 0.1667 的训练误差增加。
+比率越小，说明这次剪枝越划算。</div>
+    </section>
+
+    <section>
+      <h2>把所有知识点串起来</h2>
+      <div class="grid">
+        <div class="tile">
+          <strong>决策树</strong>
+          用不纯度指标选择局部最优分裂；本例中“胸痛类型”和“胆固醇”把 12 个样本分到纯叶节点。
+        </div>
+        <div class="tile">
+          <strong>袋装法</strong>
+          对每棵树做自助采样，再用多数投票聚合分类结果，用来降低单棵深树的方差。
+        </div>
+        <div class="tile">
+          <strong>随机森林</strong>
+          在袋装法基础上加入特征随机性：每个节点只看 m_try 个候选特征，从而降低树相关性。
+        </div>
+        <div class="tile">
+          <strong>变量重要性</strong>
+          MDI 看训练时的不纯度下降，置换重要性看打乱特征后模型表现下降多少。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    生成文件：Scripts/heart_disease_factors_tree_rf.html · 静态 HTML，无需外部依赖
+  </footer>
+</body>
+</html>
