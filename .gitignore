@@ -1,0 +1,5 @@
+/.claude/
+/Scripts/Notes/
+/Scripts/Test/*
+!/Scripts/Test/exe32/
+!/Scripts/Test/exe32/**
