@@ -2,28 +2,25 @@
 
 > 把课程转写稿和文字资料整理成结构化、可链接、可复习的 Obsidian 学习知识库。
 
+我使用这套方法学习并完成了 HarvardX CS109xa《Machine Learning and AI with Python》，最终获得 Verified Certificate：
+
+![HarvardX CS109xa Machine Learning and AI with Python 课程证书](Scripts/images/Certifacation.png)
+
 ## 只下载这个 Skill（不下载示例仓库）
 
 本仓库中真正需要安装的只有 [`Course-learning-Vault Skill/`](https://github.com/WSMYKM3/Course-learning-Vault-Skill/tree/main/Course-learning-Vault%20Skill)。`Scripts/` 下的内容是示例课程资料和产出，不是 Skill 的运行依赖。
 
-### 方法一：让 Codex 安装（推荐）
+### 方法一：交给你喜欢的 Agent 安装（推荐）
 
-在 Codex 中发送：
+把下面这段请求发送给你常用、且支持 Agent Skills 的 AI Agent：
 
 ```text
-请使用 $skill-installer 安装这个 Skill：
+请从下面的 GitHub 子目录安装或加载 course-learning-vault Skill。
+只获取这个 Skill 目录，不要下载 Scripts 等示例内容：
 https://github.com/WSMYKM3/Course-learning-Vault-Skill/tree/main/Course-learning-Vault%20Skill
 ```
 
-也可以直接运行 Codex 自带的 Skill 安装脚本：
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --url "https://github.com/WSMYKM3/Course-learning-Vault-Skill/tree/main/Course-learning-Vault%20Skill" \
-  --name course-learning-vault
-```
-
-安装后开启一个新的 Codex 会话，然后通过 `$course-learning-vault` 使用它。
+不同 Agent 的 Skill 目录、安装命令和加载方式可能不同，请以你所用 Agent 的说明为准。安装完成后，在新会话中指定使用 `course-learning-vault` 即可。
 
 ### 方法二：用 Git sparse checkout 只检出 Skill
 
@@ -41,16 +38,11 @@ Skill 位于：
 course-learning-vault-download/Course-learning-Vault Skill/
 ```
 
-如果需要安装到 Codex 的默认 Skill 目录：
-
-```bash
-cp -R "course-learning-vault-download/Course-learning-Vault Skill" \
-  ~/.codex/skills/course-learning-vault
-```
+将这个目录复制到你所用 Agent 的 Skills 目录即可；具体目标路径以该 Agent 的文档为准。
 
 ## 这个项目是什么
 
-Course Learning Vault 是一个面向课程学习的 Codex Skill。它不会把转写稿简单地“润色成 Markdown”，而是以课程原本的教学逻辑为主线，把资料整理成一个可理解、可检索、可复习的 Obsidian 知识系统。
+Course Learning Vault 是一个面向课程学习的 Agent Skill。它不会把转写稿简单地“润色成 Markdown”，而是以课程原本的教学逻辑为主线，把资料整理成一个可理解、可检索、可复习的 Obsidian 知识系统。
 
 它可以帮助你：
 
@@ -141,13 +133,6 @@ Quizzes/
 
 ![Machine Learning and AI with Python 课程练习示例](Scripts/images/Test.png)
 
-<details>
-<summary>示例课程完成证明</summary>
-
-![HarvardX CS109xa Machine Learning and AI with Python 课程证书](Scripts/images/Certifacation.png)
-
-</details>
-
 ## 使用示例
 
 ### 建立一门新课程
@@ -206,7 +191,7 @@ python3 "Course-learning-Vault Skill/scripts/audit_vault.py" \
 
 ```text
 .
-├── Course-learning-Vault Skill/   # 可独立安装的 Codex Skill
+├── Course-learning-Vault Skill/   # 可独立安装的 Agent Skill
 │   ├── SKILL.md                   # 入口、路由与共享规则
 │   ├── agents/openai.yaml         # Skill 展示信息与默认提示词
 │   ├── references/                # Vault schema、课程工作流、来源与测验规范
