@@ -1,0 +1,242 @@
+{
+  "main": {
+    "id": "3c206b41e0a2cf5e",
+    "type": "split",
+    "children": [
+      {
+        "id": "45fdbb4ef6ecb5e9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3b5e1557b57eaab6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "codelines/00 - Codelines 索引.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "00 - Codelines 索引"
+            }
+          },
+          {
+            "id": "8437065c607aaa28",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "codelines/13 - Random Forest 与分类 Bagging.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "13 - Random Forest 与分类 Bagging"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "68c9e3a327220cf0",
+    "type": "split",
+    "children": [
+      {
+        "id": "11a14564274230b9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "87c00e1dbae2e87f",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "9f10b21754de6f6b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "43c686c9c062415c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 216.5
+  },
+  "right": {
+    "id": "89ee277eaeb83373",
+    "type": "split",
+    "children": [
+      {
+        "id": "e13e8e4b46a01625",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a5041c4cb7ba42d1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "4.2 - 缺失数据与代理分割.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 4.2 - 缺失数据与代理分割"
+            }
+          },
+          {
+            "id": "a165b2e0173fe7cc",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "4.2 - 缺失数据与代理分割.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 4.2 - 缺失数据与代理分割"
+            }
+          },
+          {
+            "id": "52408c7281c95c65",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "8cc6206640dab2cb",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "2d8bdba685ed50d5",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "4.2 - 缺失数据与代理分割.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 4.2 - 缺失数据与代理分割"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "8437065c607aaa28",
+  "lastOpenFiles": [
+    "codelines/12 - Python 内置函数与自定义函数参数详解.md",
+    "codelines/06 - 模型评估与特征重要性.md",
+    "1.1.3 - 决策树分割标准.md",
+    "Formulas/4.1.2 - 随机森林变量重要性与平均不纯度下降/平均不纯度下降公式 (Mean Decrease in Impurity Formula).md",
+    "Formulas/3.2 - 袋外误差与相关树/袋外预测公式 (Out-of-Bag Prediction Formula).md",
+    "2.2 - 树剪枝与代价复杂度剪枝.md",
+    "codelines/05 - Bagging 回归与分类.md",
+    "codelines/00 - Codelines 索引.md",
+    "codelines/11 - Matplotlib 函数参数详解.md",
+    "2026-07-31.md",
+    "Terms/6.1 - AdaBoost 自适应提升/样本权重 (Sample Weight).md",
+    "Terms/6.1 - AdaBoost 自适应提升/学习器权重 (Learner Weight).md",
+    "Terms/6.1 - AdaBoost 自适应提升/加权错误率 (Weighted Error Rate).md",
+    "Terms/6.1 - AdaBoost 自适应提升/AdaBoost (Adaptive Boosting).md",
+    "Terms/6.1 - AdaBoost 自适应提升",
+    "Terms/5.3 - 梯度提升为何有效/预测空间 (Prediction Space).md",
+    "Terms/5.3 - 梯度提升为何有效/非参数模型 (Nonparametric Model).md",
+    "Terms/5.3 - 梯度提升为何有效/梯度下降 (Gradient Descent).md",
+    "Terms/5.3 - 梯度提升为何有效/损失函数 (Loss Function).md",
+    "Terms/5.3 - 梯度提升为何有效/局部最小值 (Local Minimum).md",
+    "Terms/5.3 - 梯度提升为何有效/可微 (Differentiable).md",
+    "Terms/5.3 - 梯度提升为何有效/函数空间 (Function Space).md",
+    "Terms/5.3 - 梯度提升为何有效/伪残差 (Pseudo-Residual).md",
+    "Terms/5.3 - 梯度提升为何有效",
+    "Terms/5.2 - 梯度提升/残差 (Residual).md",
+    "Terms/5.2 - 梯度提升/梯度提升 (Gradient Boosting).md",
+    "Terms/5.2 - 梯度提升/弱学习器 (Weak Learner).md",
+    "Terms/5.2 - 梯度提升/学习率 (Learning Rate).md",
+    "Terms/5.2 - 梯度提升",
+    "Terms/4.3 - 类别不平衡处理",
+    "Terms/4.2 - 缺失数据与代理分割",
+    "Terms/4.1.3 - 置换重要性与随机森林实践注意点",
+    "Terms/4.1.2 - 随机森林变量重要性与平均不纯度下降",
+    "Terms/4.1.1 - 随机森林",
+    "Terms/3.2 - 袋外误差与相关树",
+    "Terms/3.1 - 集成学习与袋装法"
+  ]
+}

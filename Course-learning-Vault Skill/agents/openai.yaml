@@ -1,0 +1,4 @@
+interface:
+  display_name: "Course Learning Vault"
+  short_description: "Build linked Obsidian course notes and review systems"
+  default_prompt: "Use $course-learning-vault to turn my course materials into a linked Obsidian study vault."

@@ -1,0 +1,208 @@
+{
+  "main": {
+    "id": "0baf39cc656e6eb5",
+    "type": "split",
+    "children": [
+      {
+        "id": "ded440a382e5fbf6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cbda9b726a925704",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "83adc44fe1f3cef4",
+    "type": "split",
+    "children": [
+      {
+        "id": "396a73b41b246982",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "95ad9a78dfc25c2f",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "21c982ef69aa1da2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "4effa3091c86f68c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "3a38cdf4d28cc2ce",
+    "type": "split",
+    "children": [
+      {
+        "id": "a71bbedca41fa73a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2bcc2011d73cf518",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "5d39ab56f910d231",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "df3d3f909e898d07",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "198cf9a6c05aae28",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "7dee9dd231fbb331",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "95ad9a78dfc25c2f",
+  "lastOpenFiles": [
+    "Course-learning-Vault Skill/scripts/test_audit_vault.py",
+    "Course-learning-Vault Skill/scripts/audit_vault.py",
+    "Course-learning-Vault Skill/references/review-and-quiz.md",
+    "Course-learning-Vault Skill/references/source-policy.md",
+    "Course-learning-Vault Skill/references/vault-schema.md",
+    "Course-learning-Vault Skill/references/lesson-workflow.md",
+    "Course-learning-Vault Skill/agents/openai.yaml",
+    "Course-learning-Vault Skill/scripts",
+    "Course-learning-Vault Skill/references",
+    "Course-learning-Vault Skill/agents",
+    "Course-learning-Vault Skill/SKILL.md",
+    "Course-learning-Vault Skill",
+    "course-learning-vault/scripts/audit_vault.py",
+    "course-learning-vault/scripts/test_audit_vault.py",
+    "course-learning-vault/references/vault-schema.md",
+    "course-learning-vault/references/source-policy.md",
+    "course-learning-vault/references/review-and-quiz.md",
+    "course-learning-vault/references/lesson-workflow.md",
+    "course-learning-vault/agents/openai.yaml",
+    "course-learning-vault/scripts",
+    "course-learning-vault/SKILL.md"
+  ]
+}
